@@ -1,0 +1,2 @@
+# Banco-de-dados
+Desenvolvi esse projeto com foco no meu conhecimento da época para ser realizado a criação de uma quantidade desejavel de clientes, telefone e enderecos pelo pyton, mas o carregamento será feito pelo propio mysql, junto com a criação de tabela e constraintss.
