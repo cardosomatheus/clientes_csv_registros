@@ -1,6 +1,6 @@
 ﻿import cx_Oracle
 
-def inicia_instante_oracle():
+def start_instant_client():
     try:
         cx_Oracle.init_oracle_client(lib_dir=r"C:\instancia_oracle_cliente\instantclient_21_12")
         
@@ -11,8 +11,8 @@ def inicia_instante_oracle():
             
 
 
-def criar_tabela ():
-    inicia_instante_oracle()
+def create_table ():
+    start_instant_client()
     connection = cx_Oracle.connect(user="hr", password='hr', dsn="localhost/XEPDB1",encoding="UTF-8")
     cursor = connection.cursor()
     
@@ -63,7 +63,6 @@ def criar_tabela ():
             except cx_Oracle.DatabaseError as e:
                 error, = e.args  
                 if error.code == 955:
-                    print(f'A Tabela já existe na base.')
                     pass
                 else:
                     print(e)
@@ -71,7 +70,7 @@ def criar_tabela ():
     print('ok')
 
     
-criar_tabela()  
+create_table()  
 
 list_values = []
 
