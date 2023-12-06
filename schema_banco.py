@@ -1,4 +1,6 @@
 ﻿import cx_Oracle
+import pandas as pd
+
 
 def start_instant_client():
     try:
@@ -17,7 +19,7 @@ def create_table ():
     cursor = connection.cursor()
     
     sql_table = [
-                """CREATE TABLE TB_ENDERECO(
+            """CREATE TABLE TB_ENDERECO(
                         ID_ENDERECO NUMBER ,
                         ESTADO VARCHAR2(30),
                         UF CHAR(2),
@@ -52,13 +54,43 @@ def create_table ():
                     )"""
             ]
     
+    sequence_key = ["CREATE SEQUENCE SEQUENCE_CLIENTE START WITH 1 INCREMENT BY 1",
+                    "CREATE SEQUENCE SEQUENCE_ENDERECO START WITH 1 INCREMENT BY 1",
+                    "CREATE SEQUENCE SEQUENCE_TELEFONE START WITH 1 INCREMENT BY 1"
+                ]
+    
+    trigger_key = [""" CREATE OR REPLACE TRIGGER TGG_CLIENTE_PK
+                        BEFORE INSERT ON TB_CLIENTE FOR EACH ROW
+                        BEGIN
+                            IF :NEW.ID_CLIENTE IS NULL THEN
+                                :NEW.ID_CLIENTE := SEQUENCE_CLIENTE.NEXTVAL;
+                            END IF;
+                        END;
+                        """,
+                        """
+                        CREATE OR REPLACE TRIGGER TGG_ENDERECO_PK
+                        BEFORE INSERT ON TB_ENDERECO FOR EACH ROW
+                        BEGIN
+                            IF :NEW.ID_ENDERECO IS NULL THEN
+                                :NEW.ID_ENDERECO := SEQUENCE_ENDERECO.NEXTVAL;
+                            END IF;
+                        END;
+                        """,
+                        """
+                        CREATE OR REPLACE TRIGGER TGG_TELEFONE_PK
+                        BEFORE INSERT ON TB_TELEFONE FOR EACH ROW
+                        BEGIN
+                            IF :NEW.ID_TELEFONE IS NULL THEN
+                                :NEW.ID_TELEFONE := SEQUENCE_TELEFONE.NEXTVAL;
+                            END IF;
+                        END;
+                        """
+                ]
     
     with connection:
         for table in sql_table:
             try:
                 cursor.execute(table)
-                
-                print(f'table {table }')
 
             except cx_Oracle.DatabaseError as e:
                 error, = e.args  
@@ -66,15 +98,31 @@ def create_table ():
                     pass
                 else:
                     print(e)
-    
+
+        for sequence in sequence_key:
+            try:
+                cursor.execute(sequence)
+            except cx_Oracle.DatabaseError as e:
+                error, = e.args  
+                if error.code == 955:
+                    pass
+                else:
+                    print(e)
+   
+        for trigger in trigger_key:
+            cursor.execute(trigger)
+        
+        connection.commit()        
     print('ok')
 
     
 create_table()  
 
-list_values = []
 
-        
+
+data = pd.read_csv(r"C:\git_matheus\Criacao-de-csv-\tb_cliente.csv", sep=',', encoding='UTF-8')
+
+print(data.head(5))
 
         
     
