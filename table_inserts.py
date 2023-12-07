@@ -5,11 +5,11 @@ import pandas as pd
 
 data = pd.read_csv(r"C:\git_matheus\Criacao-de-csv-\tb_telefone.csv", sep=',', encoding='UTF-8')
 
-#list_tuple = [tuple(row[1]) for row in data.iterrows()]
-#
-#split_data = [list_tuple[i: i+ 100] for i in range(0, len(list_tuple),100)]
-#
-#    
+list_tuple = [tuple(row[1]) for row in data.iterrows()]
+
+split_data = [list_tuple[i: i+ 100] for i in range(0, len(list_tuple),100)]
+
+   
 #connection = start_conection()
 #print(split_data[0])
 
