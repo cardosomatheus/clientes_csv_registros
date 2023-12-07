@@ -3,18 +3,20 @@
 ## Projeto de Geração de Dados para Clientes
 Este projeto foi desenvolvido com o objetivo de criar três arquivos CSV contendo informações relacionadas a clientes, endereços e telefones, utilizando a biblioteca Faker.
 
-Funcionalidades
+# Funcionalidades
 Geração de Dados:
 
 Utilização da biblioteca Faker para criar conjuntos de dados fictícios de clientes, endereços e telefones.
-Persistência no Oracle:
+# Persistência no Oracle:
 
 Após a geração dos arquivos CSV, o projeto inclui a criação de tabelas, sequências e triggers no banco de dados Oracle por meio de scripts Python.
 A sequência criada é utilizada para controlar a numeração automática de identificadores únicos no banco de dados.
-Inserção de Dados:
+# Inserção de Dados:
 
 Utilização da biblioteca Pandas e Oracle DB para realizar a inserção eficiente dos dados gerados nos arquivos CSV no banco de dados Oracle.
-Pré-requisitos
+
+
+# Pré-requisitos
 Python
 Bibliotecas: Faker, Pandas, Oracle DB
 Banco de Dados Oracle instalado e configurado
