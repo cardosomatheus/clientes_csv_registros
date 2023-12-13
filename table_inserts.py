@@ -2,44 +2,44 @@
 import pandas as pd
 
 
+def multi_insert(dataframe,tabela_destino):
+    data = dataframe
+    tabela = tabela_destino.upper()
+    
+    
+    dict_inserts = {
+        "TB_TELEFONE": """INSERT INTO TB_TELEFONE (TIPO, TELEFONE, DDD) VALUES (:1, :2, :3)""",
+        "TB_ENDERECO": """INSERT INTO TB_ENDERECO (UF, CIDADE, BAIRRO, RUA, NUMERO) VALUES (:1, :2, :3, :4, :5)""",
+        "TB_CLIENTE" : """INSERT INTO TB_CLIENTE (PRIMEIRO_NOME, SOBRENOME, GENERO, CPF, FK_ENDERECO, FK_TELEFONE) VALUES (:1, :2, :3, :4, :5, :6)"""
+    }
+    
+    if tabela in dict_inserts.keys():
+        # converto os registros por linha em str e adiciono em tuplas
+        list_tuple = [tuple(row[1]) for row in data.iterrows()]
+
+        # 1000 tuplas se tornam 1 lista de tuplas  => [(),(),(),()]
+        split_data = [list_tuple[i: i+ 1000] for i in range(0, len(list_tuple),1000)]  
+    
+
+        insert_sql = dict_inserts.get(tabela)
+        connection = start_conection()
+        
+        
+        with connection:
+            cursor = connection.cursor()        
+            for data_100 in split_data:            
+                cursor.executemany(insert_sql, data_100,batcherrors=True)
+                connection.commit()
+                
+                for error in cursor.getbatcherrors():
+                    print("Error:  ", error.message, "na linha:   ", error.offset)
+            
+            #print(len(data_100))
+    else:
+        print(f'configuração feita para inserção em apenas 3 tabelas. {dict_inserts.keys}')
+
 
 data = pd.read_csv(r"C:\git_matheus\Criacao-de-csv-\tb_telefone.csv", sep=',', encoding='UTF-8')
 
-list_tuple = [tuple(row[1]) for row in data.iterrows()]
+multi_insert(dataframe=data, tabela_destino='TB_TELEFONE')
 
-split_data = [list_tuple[i: i+ 100] for i in range(0, len(list_tuple),100)]
-
-   
-connection = start_conection()
-#print(split_data[0])
-
-
-
-
-data['tipo']     = data['tipo'].astype('string')
-data['telefone'] = data['telefone'].astype('string')
-data['ddd']      = data['ddd'].astype('string') 
-
-data.info()
-
-with connection:
-    for data_100 in split_data:
-        insert_phone = """INSERT INTO TB_TELEFONE (TIPO, TELEFONE, DDD) VALUES (:1, :2 :3)"""
-        
-        cursor = connection.cursor()        
-        cursor.executemany(insert_phone, data_100)
-        connection.commit()
-        
-        
-        
-        
-#    list_values = [row for row in cursor.execute("SELECT * FROM EMPLOYEES")]
-#
-#    tamanho_sublista = 20
-#    subregistros = [list_values[i: i+ tamanho_sublista] for i in range(0, len(list_values),tamanho_sublista)]
-#
-#    for data in subregistros:
-#        cursor.executemany("""INSERT INTO EMPLOYEES_V2
-#                                (EMPLOYEE_ID, FIRST_NAME, LAST_NAME, EMAIL,PHONE_NUMBER, HIRE_DATE,JOB_ID,SALARY,COMMISSION_PCT,MANAGER_ID,DEPARTMENT_ID)
-#                            VALUES (:1, :2, :3, :4,:5,:6,:7,:8,:9,:10,:11)""", data)
-#        connection.commit()
