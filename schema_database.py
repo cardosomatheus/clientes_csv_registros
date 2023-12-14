@@ -1,7 +1,7 @@
 ﻿import oracledb  as cx_Oracle
 
 
-def start_instant_client():
+def start_conection():
     """inicia a instancia oracle"""
     try:
         cx_Oracle.init_oracle_client(
@@ -10,10 +10,6 @@ def start_instant_client():
     except Exception as error:
         if 'Oracle Client library has already been initialized' in str(error):
             return 'oracle já incializado'
-
-
-def start_conection():
-    start_instant_client()
     
     connection = cx_Oracle.connect( user="hr", password='hr', dsn="localhost/XEPDB1", encoding="UTF-8")
     return connection
@@ -27,11 +23,10 @@ def create_table():
     table_and_sequence = [
         """CREATE TABLE TB_ENDERECO(
                         ID_ENDERECO NUMBER ,
-                        ESTADO VARCHAR2(30),
                         UF CHAR(2),
-                        CIDADE VARCHAR2(30),
-                        BAIRRO VARCHAR2(30),
-                        RUA VARCHAR2(30),
+                        CIDADE VARCHAR2(100),
+                        BAIRRO VARCHAR2(100),
+                        RUA VARCHAR2(500),
                         NUMERO VARCHAR2(5),
                         CONSTRAINT PK_ENDERECO PRIMARY KEY (ID_ENDERECO)
                     )""",
