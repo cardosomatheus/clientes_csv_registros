@@ -94,4 +94,3 @@ def create_csv(quantidade):
                                        'cpf': cpf, 'fk_endereco': fk_endereco, 'fk_telefone': fk_telefone})
 
 
-create_csv(10)
