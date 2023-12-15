@@ -1,15 +1,24 @@
 ﻿#   BIBLIOTECAS
 from faker import Faker
 from random import choice, randint
+from schema_database import start_conection
 import csv
 import pandas as pd
-from schema_database import start_conection
+import os
+
 
 
 def create_csv(quantidade):
     f = Faker('pt_BR')
-    #   telefones
 
+    # remove os arquivos csv do diretório antes de criar novos
+    archive_path = os.getcwd()
+    for archive_csv in os.listdir(archive_path):
+        if archive_csv.endswith(".csv"):
+            full_path = os.path.join(archive_path, archive_csv)    
+            os.remove(full_path)    
+
+    # Telefones
     with open('tb_telefone.csv', 'a+', encoding='utf-8', newline='') as telefones_csv:
         for cadastro in range(quantidade):
             tipo_telefone = choice(['CEL', 'COM'])
@@ -23,13 +32,12 @@ def create_csv(quantidade):
                 if telefones_csv.tell() == 0:
                     writer.writeheader()
 
-                writer.writerow(
-                    {'tipo': tipo_telefone, 'telefone': num_telefone, 'ddd': ddd_telefone})
+                writer.writerow({'tipo': tipo_telefone, 'telefone': num_telefone, 'ddd': ddd_telefone})
             else:
                 cadastro -= 1
 
 
-    #   endereços dos clientes
+    #  Endereços
     with open('tb_endereco.csv', 'a+', encoding='utf-8', newline='') as enderecos_csv:
         for cadastro in range(quantidade):
             uf         = f.estado()[0]
@@ -43,11 +51,10 @@ def create_csv(quantidade):
             if enderecos_csv.tell() == 0:
                 writer.writeheader()
 
-            writer.writerow(
-                {'sigla_uf': uf, 'cidade': cidade[0], 'bairro': bairro, 'rua': rua, 'num_casa': num_casa})
+            writer.writerow({'sigla_uf': uf, 'cidade': cidade[0], 'bairro': bairro, 'rua': rua, 'num_casa': num_casa})
 
     
-    #   cliente
+    # Clientes
     connection = start_conection()
     cursor = connection.cursor()
     with connection:
