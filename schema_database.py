@@ -105,8 +105,3 @@ def create_table():
             
         connection.commit()
 
-
-
-
-create_table()
-print('ok')
