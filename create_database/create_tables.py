@@ -1,9 +1,9 @@
-﻿from connection_oracle import connection
+﻿import connection_oracle 
 
 class CreateTables:
     
     def __init__(self):
-        self.connection = connection()
+        self.connection = connection_oracle.connection()
 
     def process_script(self):
         print('Starting Process...')
@@ -23,10 +23,7 @@ class CreateTables:
         
         with self.connection.cursor() as cursor:
             for row in cursor.execute(table_exists, TABLE_NAME= table_name):
-                if row[0] == 0:
-                    return False
-                else:
-                    return True
+                return False if row[0] == 0 else True
 
     def create_table(self,table_name:str) -> str:
         dir_tables = {"TB_ENDERECO" : """CREATE TABLE DEMO.TB_ENDERECO(
@@ -60,7 +57,7 @@ class CreateTables:
                                             CONSTRAINT FK_CLIENTE_TELEFONE FOREIGN KEY(FK_TELEFONE) REFERENCES DEMO.TB_TELEFONE(ID)
                                         )"""
         }      
-        
+        print()
         print('\*************************************************************************************/')
         
         with self.connection.cursor() as cursor:
@@ -68,6 +65,5 @@ class CreateTables:
             
             
             
-if __name__ == '__main__':
-    CreateTables().process_script()
+
 
