@@ -9,7 +9,7 @@ import os
 
 
 def create_csv(quantidade):
-    f = Faker('')
+    f = Faker('pt_BR')
 
     # remove os arquivos csv do diretório antes de criar novos
     archive_path = os.getcwd()

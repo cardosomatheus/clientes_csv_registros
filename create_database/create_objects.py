@@ -1,7 +1,7 @@
 ﻿import connection_oracle
 
 
-class CrateObjetct:
+class CreateObjetct:
     def __init__(self):
         self.connection = connection_oracle.connection()
 

@@ -1,7 +1,7 @@
-﻿from create_objects import CrateObjetct
+﻿from create_objects import CreateObjetct
 
 if __name__ == '__main__':
-    object = CrateObjetct()
+    object = CreateObjetct()
     
     object.process_script("SEQUENCE")
     object.process_script("TABLE")
