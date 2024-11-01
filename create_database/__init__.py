@@ -1,8 +1,14 @@
-﻿from create_objects import CreateObjetct
+﻿from sequence import Sequences
+from tables import Tables
+from trigger import Trigger
 
 if __name__ == '__main__':
-    object = CreateObjetct()
+    tables = Tables()
+    sequences = Sequences()
+    trigger = Trigger()    
     
-    object.process_script("SEQUENCE")
-    object.process_script("TABLE")
-    object.process_script("TRIGGER")    
+    
+    sequences.process_script()
+    tables.process_script()
+    trigger.process_script()    
+    
